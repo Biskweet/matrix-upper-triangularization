@@ -15,9 +15,6 @@ double m2[N][N] = {
 
 void triangulate_u(double ** matrix, unsigned int size)
 {
-    if (size == 0)
-        return;
-
     for (unsigned int i = 0; i < size - 1; i++) {
         for (unsigned int j = i + 1; j < size; j++) {
             double coef = matrix[j][i] / matrix[i][i];
@@ -31,9 +28,6 @@ void triangulate_u(double ** matrix, unsigned int size)
 
 void triangulate_l_normalized(double ** matrix, unsigned int size)
 {
-    if (!size)
-        return;
-
     for (unsigned int i = 0; i < size - 1; i++) {
         for (unsigned int j = i + 1; j < size; j++) {
             double coef = matrix[j][i] / matrix[i][i];
