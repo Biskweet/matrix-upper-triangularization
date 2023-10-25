@@ -16,4 +16,4 @@ class Matrix {
     
     private:
         double ** m;
-}
+};

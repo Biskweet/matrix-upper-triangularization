@@ -7,3 +7,5 @@ Matrix::Matrix(unsigned int dim) {
     for (unsigned int i; i < dim; i++)
         this->m[i] = new double[dim];
 }
+
+Matrix::initRandom

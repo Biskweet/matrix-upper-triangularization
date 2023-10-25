@@ -6,3 +6,4 @@ benchmarks.txt
 CMakeLists.txt
 *.o
 main
+temp

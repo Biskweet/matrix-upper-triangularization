@@ -16,86 +16,85 @@ double mref[N][N] =
 };
 
 
-void save_durations_to_file(char * filename, const clock_t * durations, unsigned int size)
-{
-    FILE * file = fopen(filename, "w");
+// void save_durations_to_file(char * filename, const clock_t * durations, unsigned int size)
+// {
+//     FILE * file = fopen(filename, "w");
+//
+//     for (unsigned int i = 0; i < size; i++)
+//         fprintf(file, "%d %lf\n", i, (double) durations[i] / (CLOCKS_PER_SEC));
+//
+//     fclose(file);
+// }
+//
+// clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_random, double ** ref_matrix, char should_print)
+// {
+//     double ** matrix = allocate_matrix(dim);
+//     if (init_random)
+//         init_random_matrix(matrix, dim);
+//
+//     else {
+//         for (unsigned int i = 0; i < dim; i++)
+//             for (unsigned int j = 0; j < dim; j++)
+//                 matrix[i][j] = ref_matrix[i][j];
+//     }
+//
+//     if (should_print) {
+//         printf("-----------------------------\n");
+//         print_matrix(matrix, dim, operation);
+//         printf("-----------------------------\n");
+//     }
+//
+//     clock_t before;
+//     clock_t after;
+//     // unsigned int *  permutation_plu  = NULL;
+//     // unsigned int ** permutation_pluq = NULL;
+//     unsigned int * permutations = NULL;
+//     if (operation == LU) {
+//         lu(matrix, dim);
+//     } else if (operation == PLU) {
+//         before = clock();
+//         permutations = plu(matrix, dim);
+//         after = clock();
+//     } else if (operation == PLUQ) {
+//         before = clock();
+//         permutations = pluq(matrix, dim);
+//         after = clock();
+//     }
+//
+//     if (should_print) {
+//         print_matrix(matrix, N, operation);
+//
+//         printf("-----------------------------\n");
+//
+//         printf("Permutation array P: [ ");
+//         for (unsigned int i = 0; i < dim; i++)
+//             printf("%u ", permutations[i]);
+//         printf("]\n");
+//
+//         printf("-----------------------------\n");
+//
+//         printf("Permutation array Q: [ ");
+//         for (unsigned int i = dim; i < 2 * dim; i++)
+//             printf("%u ", permutations[i]);
+//         printf("]\n");
+//
+//         printf("-----------------------------\n");
+//
+//         printf("%s Duration: %f seconds\n", operation == LU ? "LU" : (operation == PLU ? "PLU" : "PLUQ"), (double) (after - before) / CLOCKS_PER_SEC);
+//     }
+//
+//
+//     free_matrix(matrix, dim);
+//     if (permutations != NULL) {
+//         // free(permutations[0]);
+//         // free(permutations[1]);
+//         free(permutations);
+//     }
+//
+//     return (after - before);
+// }
 
-    for (unsigned int i = 0; i < size; i++)
-        fprintf(file, "%d %lf\n", i, (double) durations[i] / (CLOCKS_PER_SEC));
-
-    fclose(file);
-    return 0;
-}
-
-clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_random, double ** ref_matrix, char should_print)
-{
-    double ** matrix = allocate_matrix(dim);
-    if (init_random)
-        init_random_matrix(matrix, dim);
-
-    else {
-        for (unsigned int i = 0; i < dim; i++)
-            for (unsigned int j = 0; j < dim; j++)
-                matrix[i][j] = ref_matrix[i][j];
-    }
-
-    if (should_print) {
-        printf("-----------------------------\n");
-        print_matrix(matrix, dim, operation);
-        printf("-----------------------------\n");
-    }
-
-    clock_t before;
-    clock_t after;
-    // unsigned int *  permutation_plu  = NULL;
-    // unsigned int ** permutation_pluq = NULL;
-    unsigned int * permutations = NULL;
-    if (operation == LU) {
-        lu(matrix, dim);
-    } else if (operation == PLU) {
-        before = clock();
-        permutations = plu(matrix, dim);
-        after = clock();
-    } else if (operation == PLUQ) {
-        before = clock();
-        permutations = pluq(matrix, dim);
-        after = clock();
-    }
-
-    if (should_print) {
-        print_matrix(matrix, N, operation);
-
-        printf("-----------------------------\n");
-
-        printf("Permutation array P: [ ");
-        for (unsigned int i = 0; i < dim; i++)
-            printf("%u ", permutations[i]);
-        printf("]\n");
-
-        printf("-----------------------------\n");
-
-        printf("Permutation array Q: [ ");
-        for (unsigned int i = dim; i < 2 * dim; i++)
-            printf("%u ", permutations[i]);
-        printf("]\n");
-
-        printf("-----------------------------\n");
-
-        printf("%s Duration: %f seconds\n", operation == LU ? "LU" : (operation == PLU ? "PLU" : "PLUQ"), (double) (after - before) / CLOCKS_PER_SEC);
-    }
-
-
-    free_matrix(matrix, dim);
-    if (permutations != NULL) {
-        // free(permutations[0]);
-        // free(permutations[1]);
-        free(permutations);
-    }
-
-    return (after - before);
-}
-
-int main(int argc, char * argv[])
+int main()
 {
     // if (argc == 1) {
     //     printf("Wrong format: use ./main [UPPER_BOUND]\n");
@@ -113,29 +112,50 @@ int main(int argc, char * argv[])
 
     run_calculations(PLUQ, dim, 0, m2, 1); */
 
-    double * matrix = malloc(sizeof(double) * 6);
-    matrix[0] = 3;
-    matrix[1] = -3;
-    matrix[2] = 4;
-    matrix[3] = -4;
-    matrix[4] = 0;
-    matrix[5] = 40;
+    unsigned int m = 3;
+    unsigned int n = 2;
 
-    double * q = malloc(sizeof(double) * 6);
-    double * r = malloc(sizeof(double) * 4);
+    double * matrix = malloc(sizeof(double) * m * n);
+    double * q = malloc(sizeof(double) * m * m);
+    double * r = malloc(sizeof(double) * m * n);
 
-    gram_schmidt(matrix, 3, 2, q, r);
+    matrix[0] = 3; matrix[1] = -3;
+    matrix[2] = 4; matrix[3] = -4;
+    matrix[4] = 0; matrix[5] = 40;
 
-    printf("%lf %lf\n", matrix[0], matrix[1]);
-    printf("%lf %lf\n", matrix[2], matrix[3]);
-    printf("%lf %lf\n", matrix[4], matrix[5]);
+    clock_t begin = clock();
+    for (unsigned int i = 0; i < 1000000000; i++)
+        gram_schmidt(matrix, m, n, q, r);
+    clock_t end = clock();
 
-    printf("%lf %lf\n", q[0], q[1]);                                          
-    printf("%lf %lf\n", q[2], q[3]);
-    printf("%lf %lf\n", q[4], q[5]);
+    // printf("----------- Matrix A:\n");
+    // print_matrix(matrix, m, n, OTHER_OPERATION);
+    //
+    // printf("----------- Matrix Q:\n");
+    // print_matrix(q, m, m, OTHER_OPERATION);
+    //
+    // printf("----------- Matrix R:\n");
+    // print_matrix(r, m, n, OTHER_OPERATION);
 
-    printf("%lf %lf\n", r[0], r[1]); 
-    printf("%lf %lf\n", r[2], r[3]);
+    printf("---------------------\n");
+    printf("Time elapsed: %lf seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
+
+    begin = clock();
+    for (unsigned int i = 0; i < 1000000000; i++)
+        gram_schmidt_opti(matrix, m, n, q, r);
+    end = clock();
+
+    // printf("----------- Matrix A:\n");
+    // print_matrix(matrix, m, n, OTHER_OPERATION);
+    //
+    // printf("----------- Matrix Q:\n");
+    // print_matrix(q, m, m, OTHER_OPERATION);
+    //
+    // printf("----------- Matrix R:\n");
+    // print_matrix(r, m, n, OTHER_OPERATION);
+
+    printf("---------------------\n");
+    printf("Time elapsed: %lf seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
 
     // run_calculations(PLU, dim, 0, m2, 1);
 
