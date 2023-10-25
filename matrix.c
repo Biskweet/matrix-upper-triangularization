@@ -236,4 +236,61 @@ void init_random_matrix(double ** matrix, unsigned int dim)
             matrix[i][j] = rand() % 10 - 5;
 }
 
+double norm(double * matrix, unsigned int startingpos, unsigned int max, unsigned int stride)
+{
+	/*
+	 * Calculates the Euclidean norm of a row/line of the matrix (depending on the stride)
+	 */
 
+        double result = 0.0;
+
+        for (startingpos; startingpos < max; startingpos += stride) {
+            result += matrix[startingpos] * matrix[startingpos];
+	}
+
+        return sqrt(result);
+}
+
+double scalar_product_cols(double * matrix, unsigned int m, unsigned int n, unsigned int i, unsigned int j)
+{
+	double result = 0.0;
+	
+	for (unsigned int k = 0; k < m * n; k++)
+		result += matrix[k * n + i] * matrix[k * n + j];
+
+	return result;
+}
+
+
+void gram_schmidt(double * matrix, unsigned int m, unsigned int n, double * q, double * r)
+{
+	/*
+	 * Calculates a QR decomposition of the matrix using Gram-Schmidt's method. m lines, n cols
+	 */
+
+	r[0] = norm(matrix, 0, m * n, n);
+
+	// q_1 = a_1/r_1,1
+	for (unsigned int i = 0; i < m * n; i += n)
+		q[i] = matrix[i] / r[0];
+
+	for (unsigned int j = 2; j < n; j++) {
+		// q_j = a_j
+		for (unsigned int k = 0; k < m * n; k += n)
+			q[j * n + k] = matrix[j * n + k];
+
+		for (unsigned int i = 0; i < j - 1; i++) {
+			// r_i,j = q_i^star * q_j
+			r[i * n + j] = scalar_product_cols(matrix, m, n, i, j);
+
+			// q_j = q_j - r_i,j * q_i
+			for (unsigned int k = 0; k < m * n; k += n)
+				q[k * n + j] -= r[i * n + j] * q[k * n + i];
+		}
+
+		r[j * n + j] = norm(matrix, j, n * m, n);
+
+		for (unsigned k = 0; k < n * m; k += n)
+			q[k * n + j] /= r[j * n + j];	
+	}
+}

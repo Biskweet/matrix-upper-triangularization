@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS=-Wall -Wextra
+FLAGS=-Wall -lm
 
 all: clean matrix.o
 	$(CC) main.c matrix.o -o main $(FLags)

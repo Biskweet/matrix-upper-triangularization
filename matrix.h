@@ -1,8 +1,4 @@
-#ifndef IMPORTS
-#def IMPORTS
 #include "imports.h"
-
-#endif
 
 enum OPERATION {
     LU,
@@ -27,3 +23,5 @@ void free_matrix(double ** matrix, unsigned int dim);
 void init_random_matrix(double ** matrix, unsigned int dim);
 
 uint64_t get_biggest_pivot(double ** matrix, unsigned int iref, unsigned int size);
+
+void gram_schmidt(double * matrix, unsigned n, unsigned m, double * q, double * r);
