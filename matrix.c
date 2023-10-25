@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include "imports.h"
 #include "matrix.h"
 
@@ -62,16 +61,18 @@ unsigned int * plu(double ** matrix, unsigned int size)
 uint64_t get_biggest_pivot(double ** matrix, unsigned int iref, unsigned int size)
 {
     double max = matrix[iref][iref];
-
-
+    // printf("here\n");
     for (unsigned int i = iref; i < size; i++) {
         for (unsigned int j = iref; j < size; j++) {
-            if (matrix[i][j] > max)
-                return ((uint64_t) i << 32 | j);
+            if (matrix[i][j] > max) {
+                // printf("Sending pivots i=%d, j=%d\n", i, j);
+                return (uint64_t) i << 32 | j;
+            }
         }
     }
 
-    return ((uint64_t) iref << 32 | iref);
+    // printf("Sending pivots i=%d, j=%d\n", iref, iref);
+    return (uint64_t) iref << 32 | iref;
 }
 
 
@@ -104,6 +105,7 @@ unsigned int * pluq(double ** matrix, unsigned int size)
         // Unmasking pivots
         uint32_t i_pivot = pivots >> 32;
         uint32_t j_pivot = pivots;
+        printf("Found pivots i=%d, j=%d\n", i_pivot, j_pivot);
 
         // if (i_pivot != i || j_pivot != i) {
         //     temp_pivot = permutations[0][i];
@@ -137,15 +139,15 @@ unsigned int * pluq(double ** matrix, unsigned int size)
                     return NULL;
             }
 
-            double coef = matrix[j][i] / matrix[i][i];
-
-            // Calculate the whole line
-            for (unsigned int k = i + 1; k < size; k++) {
-                matrix[j][k] -= coef * matrix[i][k];
-            }
-
-            // Fill the lower
-            matrix[j][i] = coef;
+            // double coef = matrix[j][i] / matrix[i][i];
+            //
+            // // Calculate the whole line
+            // for (unsigned int k = i + 1; k < size; k++) {
+            //     matrix[j][k] -= coef * matrix[i][k];
+            // }
+            //
+            // // Fill the lower
+            // matrix[j][i] = coef;
         }
     }
 
@@ -201,13 +203,15 @@ extern inline void copy_matrix(double ** matrix, double ** mref, unsigned int di
 }
 
 
-void print_matrix(double ** matrix, unsigned int dim)
+void print_matrix(double ** matrix, unsigned int dim, enum OPERATION operation)
 {
     for (unsigned int i = 0; i < dim; i++) {
-        for (unsigned int j = 0; j < dim; j++)
-            printf("%.2f\t", matrix[i][j] == 0 ? 0 : matrix[i][j]);
-            // 0 because sometimes it prints out -0
-
+        for (unsigned int j = 0; j < dim; j++) {
+            if (operation == PLUQ)
+                printf("%.2e\t", matrix[i][j] == 0 ? 0 : matrix[i][j]);  // 0 because sometimes it prints out -0
+            else
+                printf("%.2f\t", matrix[i][j] == 0 ? 0 : matrix[i][j]);
+        }
 
         printf("\n");
     }
