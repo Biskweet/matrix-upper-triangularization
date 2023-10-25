@@ -30,6 +30,7 @@ char save_durations_to_file(char * filename, const clock_t * durations, unsigned
         fprintf(file, "%d %lf\n", i, (double) durations[i] / (CLOCKS_PER_SEC));
 
     fclose(file);
+    return 0;
 }
 
 clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_random, double ** ref_matrix, char should_print)
@@ -107,7 +108,7 @@ int main(int argc, char * argv[])
     //     exit(1);
     // }
 
-    unsigned int dim = N;
+    unsigned int dim = N; /*
 
     double ** m2 = (double **) malloc(sizeof(double *) * dim);
     for (int i = 0; i < dim; i++) {
@@ -116,7 +117,31 @@ int main(int argc, char * argv[])
             m2[i][j] = mref[i][j];
     }
 
-    run_calculations(PLU, dim, 0, m2, 1);
+    run_calculations(PLU, dim, 0, m2, 1);*/
+
+    double * matrix = malloc(sizeof(double) * 6);
+    matrix[0] = 3;
+    matrix[1] = -3;
+    matrix[2] = 4;
+    matrix[3] = -4;
+    matrix[4] = 0;
+    matrix[5] = 40;
+
+    double * q = malloc(sizeof(double) * 6);
+    double * r = malloc(sizeof(double) * 4);
+
+    gram_schmidt(matrix, 3, 2, q, r);
+
+    printf("%lf %lf\n", matrix[0], matrix[1]);
+    printf("%lf %lf\n", matrix[2], matrix[3]);
+    printf("%lf %lf\n", matrix[4], matrix[5]);
+
+    printf("%lf %lf\n", q[0], q[1]);                                          
+    printf("%lf %lf\n", q[2], q[3]);
+    printf("%lf %lf\n", q[4], q[5]);
+
+    printf("%lf %lf\n", r[0], r[1]); 
+    printf("%lf %lf\n", r[2], r[3]);
 
     // run_calculations(PLU, dim, 0, m2, 1);
 

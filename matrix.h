@@ -1,3 +1,5 @@
+#include "imports.h"
+
 void lu(double ** matrix, unsigned int size);
 
 char invert_lines(unsigned int * permutation, double ** matrix, unsigned int i, unsigned int size);
@@ -15,3 +17,5 @@ void print_matrix(double ** matrix, unsigned int dim);
 void free_matrix(double ** matrix, unsigned int dim);
 
 void init_random_matrix(double ** matrix, unsigned int dim);
+
+void gram_schmidt(double * matrix, unsigned n, unsigned m, double * q, double * r);
