@@ -8,4 +8,4 @@ matrix.o:
 	$(CC) matrix.c -c -o matrix.o $(FLAGS)
 
 clean:
-	rm -f *.o
+	rm -f *.o main

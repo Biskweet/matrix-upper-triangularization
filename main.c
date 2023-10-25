@@ -16,13 +16,7 @@ double mref[N][N] =
 };
 
 
-enum OPERATION {
-    LU,
-    PLU,
-    PLUQ
-};
-
-char save_durations_to_file(char * filename, const clock_t * durations, unsigned int size)
+void save_durations_to_file(char * filename, const clock_t * durations, unsigned int size)
 {
     FILE * file = fopen(filename, "w");
 
@@ -46,7 +40,7 @@ clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_r
 
     if (should_print) {
         printf("-----------------------------\n");
-        print_matrix(matrix, dim);
+        print_matrix(matrix, dim, operation);
         printf("-----------------------------\n");
     }
 
@@ -68,7 +62,7 @@ clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_r
     }
 
     if (should_print) {
-        print_matrix(matrix, N);
+        print_matrix(matrix, N, operation);
 
         printf("-----------------------------\n");
 
@@ -86,7 +80,7 @@ clock_t run_calculations(enum OPERATION operation, unsigned int dim, char init_r
 
         printf("-----------------------------\n");
 
-        printf("%s Duration: %f seconds\n", operation == LU ? "LU" : "PLU", (double) (after - before) / CLOCKS_PER_SEC);
+        printf("%s Duration: %f seconds\n", operation == LU ? "LU" : (operation == PLU ? "PLU" : "PLUQ"), (double) (after - before) / CLOCKS_PER_SEC);
     }
 
 
@@ -116,7 +110,7 @@ int main(int argc, char * argv[])
             m2[i][j] = mref[i][j];
     }
 
-    run_calculations(PLU, dim, 0, m2, 1);
+    run_calculations(PLUQ, dim, 0, m2, 1);
 
     // run_calculations(PLU, dim, 0, m2, 1);
 
